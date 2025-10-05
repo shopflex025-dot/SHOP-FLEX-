@@ -1,2 +1,2 @@
 # SHOP-FLEX-
-https://drive.google.com/file/d/1iwLFLP4qAvQ0MGJ5IiK-wm-UDxbPr47z/view?usp=drivesdk
+https://claude.ai/public/artifacts/af8ef653-3253-4fc7-81b4-78c813cd1753
