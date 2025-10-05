@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop Flex - Galeria de Produtos</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+
+        .logo h1 {
+            color: #ff8c42;
+            font-size: 2.5rem;
+            margin: 10px 0;
+        }
+
+        .banner {
+            background: #ff8c42;
+            height: 200px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+
+        .header-info {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header-info h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .stats {
+            background: rgba(255,255,255,0.2);
+            padding: 15px 30px;
+            border-radius: 10px;
+            display: inline-block;
+            margin-top: 15px;
+        }
+
+        .stats span {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            color: white;
+        }
+
+        .btn-add {
+            background: #4CAF50;
+        }
+
+        .btn-clear {
+            background: #f44336;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+        }
+
+        .modal-box {
+            background: white;
+            width: 90%;
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 30px;
+            border-radius: 15px;
+        }
+
+        .modal-box h3 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .form-field {
+            margin-bottom: 15px;
+        }
+
+        .form-field label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .form-field input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn-save {
+            flex: 1;
+            background: #4CAF50;
+        }
+
+        .btn-cancel {
+            flex: 1;
+            background: #999;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .card-image {
+            width: 100%;
+            height: 200px;
+            background: #ff8c42;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+
+        .card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .card-content {
+            padding: 15px;
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .card-link {
+            color: #667eea;
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: block;
+            margin-bottom: 15px;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-edit {
+            flex: 1;
+            padding: 8px;
+            background: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .btn-delete {
+            flex: 1;
+            padding: 8px;
+            background: #f44336;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .empty {
+            text-align: center;
+            color: white;
+            padding: 50px;
+            grid-column: 1 / -1;
+        }
+
+        .empty h3 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <div style="font-size: 3rem;">🛒</div>
+            <h1>SHOP FLEX</h1>
+        </div>
+
+        <div class="banner">
+            🛍️ 
+        </div>
+
+        <div class="header-info">
+            <h2>Galeria de Produtos</h2>
+            <p>Cadastre e gerencie seus produtos</p>
+            <div class="stats">
+                <span id="count">0</span> Produtos
+            </div>
+        </div>
+
+        <div class="controls">
+            <div class="search-box">
+                <input type="text" id="search" placeholder="🔍 Buscar produtos...">
+            </div>
+            <button class="btn btn-add" id="addBtn">+ Adicionar</button>
+            <button class="btn btn-clear" id="clearBtn">🗑️ Limpar</button>
+        </div>
+
+        <div class="gallery" id="gallery"></div>
+    </div>
+
+    <div class="modal" id="modal">
+        <div class="modal-box">
+            <h3 id="modalTitle">Adicionar Produto</h3>
+            <form id="form">
+                <div class="form-field">
+                    <label>Nome do Produto</label>
+                    <input type="text" id="name" required>
+                </div>
+                <div class="form-field">
+                    <label>Link do Produto</label>
+                    <input type="url" id="link" required>
+                </div>
+                <div class="form-field">
+                    <label>URL da Foto</label>
+                    <input type="url" id="image" required>
+                </div>
+                <div class="btn-group">
+                    <button type="submit" class="btn btn-save">Salvar</button>
+                    <button type="button" class="btn btn-cancel" id="cancelBtn">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        var db = [];
+        var editIdx = -1;
+
+        function load() {
+            try {
+                var data = localStorage.getItem('shopflex');
+                if (data) {
+                    db = JSON.parse(data);
+                }
+            } catch(e) {
+                db = [];
+            }
+            show();
+        }
+
+        function save() {
+            localStorage.setItem('shopflex', JSON.stringify(db));
+        }
+
+        function show(filter) {
+            var g = document.getElementById('gallery');
+            var list = db;
+            
+            if (filter) {
+                list = db.filter(function(p) {
+                    return p.name.toLowerCase().indexOf(filter.toLowerCase()) > -1;
+                });
+            }
+
+            if (list.length === 0) {
+                g.innerHTML = '<div class="empty"><h3>📦</h3><p>Nenhum produto cadastrado</p></div>';
+            } else {
+                var html = '';
+                for (var i = 0; i < list.length; i++) {
+                    var p = list[i];
+                    var idx = db.indexOf(p);
+                    var img = p.img ? '<img src="' + p.img + '" onerror="this.style.display=\'none\'">' : '📷';
+                    html += '<div class="card">' +
+                        '<div class="card-image">' + img + '</div>' +
+                        '<div class="card-content">' +
+                        '<div class="card-title">' + p.name + '</div>' +
+                        '<a href="' + p.link + '" target="_blank" class="card-link">🔗 Ver Produto</a>' +
+                        '<div class="card-actions">' +
+                        '<button class="btn-edit" onclick="edit(' + idx + ')">✏️ Editar</button>' +
+                        '<button class="btn-delete" onclick="del(' + idx + ')">🗑️ Excluir</button>' +
+                        '</div></div></div>';
+                }
+                g.innerHTML = html;
+            }
+            document.getElementById('count').textContent = db.length;
+        }
+
+        function openModal() {
+            editIdx = -1;
+            document.getElementById('modalTitle').textContent = 'Adicionar Produto';
+            document.getElementById('form').reset();
+            document.getElementById('modal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+
+        function edit(i) {
+            editIdx = i;
+            var p = db[i];
+            document.getElementById('modalTitle').textContent = 'Editar Produto';
+            document.getElementById('name').value = p.name;
+            document.getElementById('link').value = p.link;
+            document.getElementById('image').value = p.img;
+            document.getElementById('modal').style.display = 'block';
+        }
+
+        function del(i) {
+            if (confirm('Excluir este produto?')) {
+                db.splice(i, 1);
+                save();
+                show();
+            }
+        }
+
+        document.getElementById('addBtn').onclick = openModal;
+        document.getElementById('cancelBtn').onclick = closeModal;
+        
+        document.getElementById('clearBtn').onclick = function() {
+            if (confirm('Excluir TODOS os produtos?')) {
+                db = [];
+                save();
+                show();
+            }
+        };
+
+        document.getElementById('form').onsubmit = function(e) {
+            e.preventDefault();
+            var p = {
+                name: document.getElementById('name').value,
+                link: document.getElementById('link').value,
+                img: document.getElementById('image').value
+            };
+            
+            if (editIdx >= 0) {
+                db[editIdx] = p;
+            } else {
+                db.push(p);
+            }
+            
+            save();
+            show();
+            closeModal();
+        };
+
+        document.getElementById('search').oninput = function(e) {
+            show(e.target.value);
+        };
+
+        document.getElementById('modal').onclick = function(e) {
+            if (e.target === this) closeModal();
+        };
+
+        load();
+    </script>
+</body>
+</html>
